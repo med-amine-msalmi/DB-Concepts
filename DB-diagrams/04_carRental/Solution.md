@@ -14,11 +14,11 @@ model, year, mileage, and rental rates, fuel type (Gaz,
 Electric,.etc.) , plate number, Vehicle Category (4x4,
 Sedan, ..etc.)
 - Vehicle Fuel Types:
-    - Gasoline (Petrol). 
-    - Petrol
-    - Diesel
-    - Electric
-    - Hybrid
+    - **Gasoline** (Petrol). 
+    - **Petrol**
+    - **Diesel**
+    - **Electric**
+    - **Hybrid**
 ## 3. Vehicle Booking : 
 
 -When a customer rents a vehicle System should keep booking
