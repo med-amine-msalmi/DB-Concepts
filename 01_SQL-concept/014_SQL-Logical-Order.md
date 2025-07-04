@@ -1,4 +1,6 @@
 
+## SQL Logical Order !
+
 1. **FROM**
 Identify source tables and datasets.
 2. **JOIN**
