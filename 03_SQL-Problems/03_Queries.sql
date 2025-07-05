@@ -62,3 +62,31 @@ where Year between 1950 and 2000
 group by Makes.Make
 ) as t
 order by vehiclesNumber desc ;
+
+--Get Make , FuelTypeName and Number of vehicles per FueltType Per Make between 1950 and 2000
+select Makes.Make, FuelTypes.FuelTypeName, count(*) as VehiclesNumber from VehicleDetails
+inner join  Makes on Makes.MakeID=VehicleDetails.MakeID
+inner join FuelTypes on FuelTypes.FuelTypeID=VehicleDetails.FuelTypeID
+where Year between 1950 and 2000
+group by Makes.Make,FuelTypes.FuelTypeName
+order by Makes.Make;
+
+--Get all vehicles runs with gaz
+select *from VehicleDetails 
+inner join FuelTypes on FuelTypes.FuelTypeID=VehicleDetails.FuelTypeID
+where FuelTypeName='GAS';
+
+--Get all makes runs with gaz
+select distinct(Makes.Make),FuelTypes.FuelTypeName from VehicleDetails
+inner join Makes on Makes.MakeID=VehicleDetails.MakeID
+inner join FuelTypes on FuelTypes.FuelTypeID=VehicleDetails.FuelTypeID
+where FuelTypeName='GAS';
+
+--Get Total makes that runs with gas 
+select count(*) as TotalMakes from
+(
+select distinct(Makes.Make) from VehicleDetails
+inner join Makes on Makes.MakeID=VehicleDetails.MakeID
+inner join FuelTypes on FuelTypes.FuelTypeID=VehicleDetails.FuelTypeID
+where FuelTypeName='GAS'
+) as t;
