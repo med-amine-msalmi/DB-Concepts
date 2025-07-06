@@ -103,3 +103,33 @@ inner join Makes on Makes.MakeID=VehicleDetails.MakeID
 group by Makes.Make
 having count(*)>20000
 order by TotalVehicles Desc;
+
+--Get all Makes with make starts with 'B'
+select *from Makes
+where Make like 'B%';
+
+-- Get all Makes with make ends with 'W'
+ select *from Makes 
+ where Make like '%w';
+
+ --Get all Makes that manufactures DriveTypeName = FWD
+ select DISTINCT(Makes.Make),DriveTypes.DriveTypeName from VehicleDetails 
+ inner join Makes on Makes.MakeID=VehicleDetails.MakeID
+ inner join DriveTypes on DriveTypes.DriveTypeID=VehicleDetails.DriveTypeID
+ where DriveTypes.DriveTypeName='FWD'
+
+ --Get total Makes that Mantufactures DriveTypeName=FWD
+ select count(*) from
+ (
+  select DISTINCT(Makes.Make),DriveTypes.DriveTypeName from VehicleDetails 
+ inner join Makes on Makes.MakeID=VehicleDetails.MakeID
+ inner join DriveTypes on DriveTypes.DriveTypeID=VehicleDetails.DriveTypeID
+ where DriveTypes.DriveTypeName='FWD'
+ )as R;
+
+ --Get total vehicles per DriveTypeName Per Make and order them per make asc then per total Desc
+ select DriveTypes.DriveTypeName,Makes.Make,count(*) as TotalVehicles
+ from VehicleDetails inner join Makes on Makes.MakeID=VehicleDetails.MakeID
+ inner join DriveTypes on DriveTypes.DriveTypeID=VehicleDetails.DriveTypeID
+ group by DriveTypes.DriveTypeName,Makes.Make
+ order by Makes.Make asc ,DriveTypes.DriveTypeName;
