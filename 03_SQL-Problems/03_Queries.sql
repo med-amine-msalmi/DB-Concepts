@@ -90,3 +90,16 @@ inner join Makes on Makes.MakeID=VehicleDetails.MakeID
 inner join FuelTypes on FuelTypes.FuelTypeID=VehicleDetails.FuelTypeID
 where FuelTypeName='GAS'
 ) as t;
+
+--Count Vehicles by make and order them by NumberOfVehicles Desc 
+select Makes.Make,count(*) as TotalVehicles from VehicleDetails 
+inner join Makes on Makes.MakeID=VehicleDetails.MakeID
+group by Makes.Make
+order by TotalVehicles Desc;
+
+--Get all makes of vehicles that manufacture more than 20K Vehicles 
+select Makes.Make,count(*) as TotalVehicles from VehicleDetails 
+inner join Makes on Makes.MakeID=VehicleDetails.MakeID
+group by Makes.Make
+having count(*)>20000
+order by TotalVehicles Desc;
