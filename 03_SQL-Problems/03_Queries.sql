@@ -133,3 +133,19 @@ where Make like 'B%';
  inner join DriveTypes on DriveTypes.DriveTypeID=VehicleDetails.DriveTypeID
  group by DriveTypes.DriveTypeName,Makes.Make
  order by Makes.Make asc ,DriveTypes.DriveTypeName;
+
+--Get total vehicles per DriveTypeName Per Make then filter only results with total > 10,000
+select DriveTypes.DriveTypeName , Makes.Make, count(*) as TotalVehicles from VehicleDetails
+inner join Makes on Makes.MakeID=VehicleDetails.MakeID 
+inner join DriveTypes on DriveTypes.DriveTypeID=VehicleDetails.DriveTypeID 
+group by DriveTypes.DriveTypeName,Makes.Make
+having count(*) >= 10000
+order by TotalVehicles desc;
+
+--Get all Vehicles that number of doors is not specified
+select count(*) as TotalVehicles from VehicleDetails 
+where NumDoors is null;
+
+--Get percentage of vehicles that has no doors specified
+select Persc=cast((select count(*) from VehicleDetails 
+             where NumDoors is null) as float) *100 / cast( ( select count(*) from VehicleDetails) as float  )
