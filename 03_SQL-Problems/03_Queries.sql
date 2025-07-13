@@ -149,3 +149,37 @@ where NumDoors is null;
 --Get percentage of vehicles that has no doors specified
 select Persc=cast((select count(*) from VehicleDetails 
              where NumDoors is null) as float) *100 / cast( ( select count(*) from VehicleDetails) as float  )
+
+--Get MakeID , Make, SubModelName for all vehicles that have SubModelName 'Elite'
+select distinct VehicleDetails.MakeID , Makes.Make , SubModels.SubModelName from VehicleDetails 
+inner join Makes on Makes.MakeID = VehicleDetails.MakeID 
+inner join SubModels on VehicleDetails.SubModelID=SubModels.SubModelID
+where SubModels.SubModelName='Elite';
+
+--Get all vehicles that have Engines > 3 Liters and have only 2 doors
+select * from VehicleDetails 
+where Engine_Liter_Display>3 
+and NumDoors=2
+
+--Get make and vehicles that the engine contains 'OHV' and have Cylinders = 4
+select Makes.Make,*from VehicleDetails 
+inner join Makes on Makes.MakeID=VehicleDetails.MakeID
+where Engine like '%OHV%'
+and Engine_Cylinders=4;
+
+--Get all vehicles that their body is 'Sport Utility' and Year > 2020
+select * from VehicleDetails
+inner join Bodies on Bodies.BodyID=VehicleDetails.BodyID
+where BodyName='Sport Utility'
+and Year>2020;
+
+--Get all vehicles that their Body is 'Coupe' or 'Hatchback' or 'Sedan'
+select *from VehicleDetails 
+inner join Bodies on Bodies.BodyID=VehicleDetails.BodyID
+where Bodies.BodyName in ('Coupe','Hatchback','Sedan');
+
+--Get all vehicles that their body is 'Coupe' or 'Hatchback' or 'Sedan' and manufactured in year 2008 or 2020 or 2021
+select *from VehicleDetails 
+inner join Bodies on Bodies.BodyID=VehicleDetails.BodyID
+where Bodies.BodyName in ('Coupe','Hatchback','Sedan')
+and VehicleDetails.year in (2008,2020,2021)
