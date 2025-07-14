@@ -183,3 +183,33 @@ select *from VehicleDetails
 inner join Bodies on Bodies.BodyID=VehicleDetails.BodyID
 where Bodies.BodyName in ('Coupe','Hatchback','Sedan')
 and VehicleDetails.year in (2008,2020,2021)
+
+--Return found=1 if there is any vehicle made in year 1950
+--Methode 1)
+    select  
+    	case 
+    		when (select count(*) from VehicleDetails where Year=1950) > 0 then 1
+    		else 0
+    	end 
+    as Found ;
+--Methode 2)
+    select found=1 where exists 
+    (select top 1 * from VehicleDetails where Year=1950); 
+
+--Get all Vehicle_Display_Name, NumDoors and add extra column to describe number of doors by words,
+--and if door is null display 'Not Set'
+select VehicleDetails.Vehicle_Display_Name ,VehicleDetails.NumDoors,
+case
+	when VehicleDetails.NumDoors =1 then 'one door'
+	when  VehicleDetails.NumDoors =2 then 'two doors'
+	when  VehicleDetails.NumDoors =3 then 'three doors'
+	when  VehicleDetails.NumDoors =4 then 'four doors'
+	when VehicleDetails.NumDoors =8 then 'eight doors'
+	when VehicleDetails.NumDoors is null then 'Not Set' 
+end as DoorDescription 
+from VehicleDetails
+
+-- Problem 31: Get all Vehicle_Display_Name, year and add extra column to calculate the age
+--of the car then sort the results by age desc.
+select Vehicle_Display_Name,year,Age=year(getdate())- year from VehicleDetails
+order by Age desc;
