@@ -195,7 +195,6 @@ and VehicleDetails.year in (2008,2020,2021)
 --Methode 2)
     select found=1 where exists 
     (select top 1 * from VehicleDetails where Year=1950); 
-
 --Get all Vehicle_Display_Name, NumDoors and add extra column to describe number of doors by words,
 --and if door is null display 'Not Set'
 select VehicleDetails.Vehicle_Display_Name ,VehicleDetails.NumDoors,
@@ -213,3 +212,29 @@ from VehicleDetails
 --of the car then sort the results by age desc.
 select Vehicle_Display_Name,year,Age=year(getdate())- year from VehicleDetails
 order by Age desc;
+
+--Get all Vehicle_Display_Name, year, Age for vehicles that their age 
+--between 15 and 25 years old 
+select * from
+(
+select VehicleDetails.Vehicle_Display_Name,year,year(getdate())-year as age
+from VehicleDetails
+)as R
+where age between 15 and 25 
+order by age desc;
+
+--Get Minimum Engine CC , Maximum Engine CC , and Average Engine CC of all Vehicles
+select min(VehicleDetails.Engine_CC) as Minimum ,max(Engine_CC) as Maximum,avg(Engine_CC)
+from VehicleDetails;
+
+--Get all vehicles that have the minimum Engine_CC
+select *from VehicleDetails
+where Engine_CC=(select min(Engine_CC ) from VehicleDetails);
+
+--Get all vehicles that have the maximum Engine_CC
+select *from VehicleDetails
+where Engine_CC=(select max(Engine_CC ) from VehicleDetails);
+
+--Get all vehicles that have Engine_CC below average
+select *from VehicleDetails
+where Engine_CC <(select avg(Engine_CC ) from VehicleDetails);
