@@ -238,3 +238,42 @@ where Engine_CC=(select max(Engine_CC ) from VehicleDetails);
 --Get all vehicles that have Engine_CC below average
 select *from VehicleDetails
 where Engine_CC <(select avg(Engine_CC ) from VehicleDetails);
+
+--Get total vehicles that have Engin_CC above average
+select count(*) as TotalVehicle from 
+(
+	select *from VehicleDetails
+	where Engine_CC>(select avg(Engine_CC) from VehicleDetails)
+) as R
+
+--Get all unique Engin_CC and sort them Desc
+select distinct(Engine_CC) from VehicleDetails
+order by Engine_CC Desc
+
+--Get the maximum 3 Engine CC
+select top 3*from (
+select distinct(Engine_CC) from VehicleDetails
+) as R
+order by Engine_CC Desc;
+--Get the vehicles with the top 3 highest Engine_CC and order them 
+select * from VehicleDetails
+where Engine_CC in
+	(select top 3*from (
+		select distinct(Engine_CC) from VehicleDetails
+		) as R
+		order by Engine_CC Desc
+	)
+order by Engine_CC desc;
+--Get the number of vehicles in the top 3 highest Engine_CC grouped , ordred by Engine_CC
+select  Engine_CC,count(*) as vehicle_numbers 
+from(
+	select * from VehicleDetails
+where Engine_CC in
+	(select top 3*from (
+		select distinct(Engine_CC) from VehicleDetails
+		) R1
+		order by Engine_CC Desc
+	)
+)as R2
+group by Engine_CC
+order by Engine_CC desc;
