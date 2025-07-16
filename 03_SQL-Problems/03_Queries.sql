@@ -277,3 +277,35 @@ where Engine_CC in
 )as R2
 group by Engine_CC
 order by Engine_CC desc;
+
+--Get all Makes that manufactures one of the Max 3 Engine CC
+select max(Engine_CC) from VehicleDetails;
+
+select distinct(Makes.Make) from VehicleDetails 
+inner join Makes on Makes.MakeID=VehicleDetails.MakeID
+where VehicleDetails.Engine_CC in (
+	select distinct top 3 Engine_CC  from VehicleDetails
+	order by Engine_CC desc
+)
+order by Make;
+
+-- Get a table of unique Engine_CC and calculate tax per Engine CC as follows:
+	-- 0 to 1000    Tax = 100
+	-- 1001 to 2000 Tax = 200
+	-- 2001 to 4000 Tax = 300
+	-- 4001 to 6000 Tax = 400
+	-- 6001 to 8000 Tax = 500
+	-- Above 8000   Tax = 600
+	-- Otherwise    Tax = 0
+select distinct(Engine_CC),
+case 
+    when Engine_CC between 0 and 1000 then 100
+	when Engine_CC between 1001 and 2000  then 200
+	when Engine_CC between 2001 and 4000  then 300
+	when Engine_CC between 4001 and 6000  then 400
+	when Engine_CC between 6001 and 8000  then 500
+	when Engine_CC > 8000 then 600
+	else 0
+end as tax
+from VehicleDetails
+order by Engine_CC desc;
