@@ -309,3 +309,16 @@ case
 end as tax
 from VehicleDetails
 order by Engine_CC desc;
+
+--Get Make and Total Number Of Doors Manufactured Per Make
+select Makes.Make,sum(NumDoors) as TotalNumDoors from VehicleDetails
+inner join Makes on Makes.MakeID =VehicleDetails.MakeID
+group by Makes.Make
+order by TotalNumDoors;
+
+--Get Total Number Of Doors Manufactured by 'Ford'
+select Makes.Make,sum(NumDoors) as TotalNumDoors from VehicleDetails
+inner join Makes on Makes.MakeID =VehicleDetails.MakeID
+group by Makes.Make
+having Makes.Make='Ford'
+order by TotalNumDoors;
