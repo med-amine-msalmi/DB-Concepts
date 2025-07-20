@@ -322,3 +322,58 @@ inner join Makes on Makes.MakeID =VehicleDetails.MakeID
 group by Makes.Make
 having Makes.Make='Ford'
 order by TotalNumDoors;
+
+--Get Number of Models Per Make
+select Makes.Make, count(*)as NumberOfModels from VehicleDetails
+inner join MakeModels on MakeModels.ModelID =VehicleDetails.ModelID 
+inner join Makes on Makes.MakeID=MakeModels.MakeID
+group by Makes.Make
+order by NumberOfModels desc;
+
+--Get the highest 3 manufacturers that make the highest number of models
+select top 3 Make from  (
+	select Makes.Make, count(*)as NumberOfModels from VehicleDetails
+	inner join MakeModels on MakeModels.ModelID =VehicleDetails.ModelID 
+	inner join Makes on Makes.MakeID=MakeModels.MakeID
+	group by Makes.Make
+)as R1
+order by NumberOfModels desc
+
+--Get the highest number of models manufactured
+select max(NumberOfModels) as MaximumNumber from (
+	select  Makes.Make, count(*)as NumberOfModels from Makes
+	inner join MakeModels on MakeModels.MakeID =Makes.MakeID
+	group by Makes.Make
+)as R1
+--or we can optimise it 
+select top 1 Makes.Make, count(*)as NumberOfModels from VehicleDetails
+inner join MakeModels on MakeModels.ModelID =VehicleDetails.ModelID 
+inner join Makes on Makes.MakeID=MakeModels.MakeID
+group by Makes.Make
+order by NumberOfModels desc;
+
+
+--Get the highest Manufacturers manufactured the highest number of models
+select* from (
+	select  Makes.Make, count(*)as NumberOfModels from Makes
+	inner join MakeModels on MakeModels.MakeID =Makes.MakeID
+	group by Makes.Make
+	
+	) as R1
+where R1.NumberOfModels = (select max(NumberOfModels) as MaximumNumber from (
+							select  Makes.Make, count(*)as NumberOfModels from Makes
+							inner join MakeModels on MakeModels.MakeID =Makes.MakeID
+							group by Makes.Make
+					)as R2)
+
+--Get the Lowest Manufacturers manufactured the lowest number of models
+select Makes.Make, count(*)as NumberOfModels from Makes
+inner join MakeModels on MakeModels.MakeID =Makes.MakeID
+group by Makes.Make
+having count(*)=(
+select min(NumberOfModels) as MinimunModel from (
+							select  Makes.Make, count(*)as NumberOfModels from Makes
+							inner join MakeModels on MakeModels.MakeID =Makes.MakeID
+							group by Makes.Make ) as R1
+
+)
