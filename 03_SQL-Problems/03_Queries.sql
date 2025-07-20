@@ -377,3 +377,7 @@ select min(NumberOfModels) as MinimunModel from (
 							group by Makes.Make ) as R1
 
 )
+
+--Get all Fuel Types , each time the result should be showed in random order
+select *from FuelTypes
+order by newID();
